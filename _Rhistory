@@ -1,0 +1,163 @@
+setwd("C:/Users/nishantkumar/Desktop/Data scientist/Machine Learning A-Z Template Folder/Part 2 - Regression/Section 6 - Polynomial Regression/Polynomial_Regression")
+dataset = read.csv('Position_Salaries.csv')
+dataset = dataset[2:3]
+library(e1071)
+regressor = svm(formula = Salary ~ .,
+data = dataset,
+type = 'eps-regression',
+kernel = 'radial')
+y_pred = predict(regressor, data.frame(Level = 6.5))
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$Level, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$Level, y = predict(regressor, newdata = dataset)),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+setwd("C:/Users/nishantkumar/Desktop/EQModel")
+library(caret)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+#importing data
+DataEq = read.csv("oneyear.csv", stringsAsFactors = FALSE)
+summary(DataEq)
+#removing NA columns
+DataEq = DataEq[ , -7]
+class(DataEq$time)
+#time = DataEq$time
+#converting time to usable format
+DataEq$time = ymd_hms(as_datetime(DataEq$time))
+DataEq$updated = ymd_hms(as_datetime(DataEq$updated))
+DataEq$year = year(DataEq$time)
+DataEq$month = month(DataEq$time)
+#pattern in width and magnitude of the earthquake
+ggplot(DataEq, aes(x = mag, y = depth, col = magType))+
+geom_point(alpha = 0.6)+
+facet_wrap(~ month)+
+theme_light()
+# Removing no variance data
+eqClean = DataEq[ , c(-10, -11, -14, -19, -20,-21)]
+#scatterplot of lan and lat
+ggplot(eqClean, aes(x = latitude, y = longitude, col = mag)) +
+geom_point(alpha = 0.4)+
+facet_wrap(~ month)+
+theme_classic()
+summary(eqClean$latitude)
+eqClean$latCre = eqClean$latitude + 11.7622
+summary(eqClean$latCre)
+ggplot(eqClean, aes(x = latCre, y = longitude, col = mag)) +
+geom_point(alpha = 0.4)+
+facet_wrap(~ month)+
+theme_classic()
+eqClean$longCre = sqrt(eqClean$longitude)
+ggplot(eqClean, aes(x = latCre, y = longCre, col = mag)) +
+geom_point(alpha = 0.4)+
+facet_wrap(~ month)+
+theme_classic()
+eqClean$Constant = eqClean$latCre * eqClean$longitude
+summary(eqClean$Constant)
+ggplot(eqClean, aes(x = Constant, y = longitude, col = mag)) +
+geom_point(alpha = 0.4)+
+facet_wrap(~ month)+
+theme_classic()
+View(eqClean)
+View(eqClean)
+dataset = eqClean[ , c(2, 3, 4, 5, 17)]
+View(dataset)
+library(e1071)
+regressor = svm(formula = mag ~ .,
+data = dataset,
+type = 'eps-regression',
+kernel = 'radial')
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset)),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset[ , -4])),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+regressor = svm(formula = mag ~ month,
+data = dataset,
+type = 'eps-regression',
+kernel = 'radial')
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset[ , 5])),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+dataset_all = eqClean[ , c(2, 3, 4, 5, 17)]
+dataset = dataset_all[ , c(4, 5)]
+library(e1071)
+regressor = svm(formula = mag ~ month,
+data = dataset,
+type = 'eps-regression',
+kernel = 'radial')
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset)),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+source('C:/Users/nishantkumar/Desktop/EQModel/EQ1.R', echo=TRUE)
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset$month),
+colour = 'blue') +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$month, y = dataset$Salary),
+colour = 'red') +
+geom_line(aes(x = dataset$month, y = predict(regressor, newdata = dataset$month),
+colour = 'blue')) +
+ggtitle('Truth or Bluff (SVR)') +
+xlab('Level') +
+ylab('Salary')
+y = predict(regressor, newdata = dataset$month)
+y = predict(regressor, newdata = 5)
+View(dataset)
+View(dataset_all)
+dataset = dataset_all[ , c(1, 2)]
+View(dataset)
+library(e1071)
+regressor = svm(formula = latitude ~ .,
+data = dataset,
+type = 'eps-regression',
+kernel = 'radial')
+y_pred = predict(regressor, newdata = data.frame(dataset$longitude))
+y_pred = predict(regressor, newdata = dataset)
+source('C:/Users/nishantkumar/Desktop/EQModel/EQ1.R', echo=TRUE)
+library(ggplot2)
+ggplot() +
+geom_point(aes(x = dataset$longitude, y = dataset$latitude),
+colour = 'red') +
+geom_line(aes(x = dataset$longitude, y = predict(regressor, newdata = dataset)),
+colour = 'blue') +
+ggtitle('fitting fault line') +
+xlab('longitude') +
+ylab('lattitude')

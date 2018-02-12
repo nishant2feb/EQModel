@@ -1,0 +1,77 @@
+---
+title: "Earthquake Sample Model"
+author: "Nishant"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sample Data Collection Details
+The sample data is taken by randomly selecting the region of south east asia covering the countries `Malaysia`, `Indomesia` etc..
+The sample data taken over a period of one year from **10 Feb 2017** to **10 Feb 2018**.
+The data model used here may or may not be used in final model as it all depends on the structure and 
+
+
+
+```{r cars, message=FALSE, warning=FALSE, echo=FALSE}
+library(caret)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(PerformanceAnalytics)
+
+```
+
+## Data Overview
+
+We will overview our data and remove unwanted or low variance features.
+
+```{r pressure, echo=FALSE}
+#importing data
+
+DataEq = read.csv("oneyear.csv", stringsAsFactors = FALSE)
+
+summary(DataEq)
+
+#removing NA columns
+
+DataEq = DataEq[ , -7]
+
+class(DataEq$time)
+
+#converting time to usable format
+
+DataEq$time = ymd_hms(as_datetime(DataEq$time))
+DataEq$updated = ymd_hms(as_datetime(DataEq$updated))
+DataEq$year = year(DataEq$time)
+DataEq$month = month(DataEq$time)
+DataEq$day = day(DataEq$time)
+
+#pattern in width and magnitude of the earthquake
+
+ggplot(DataEq, aes(x = mag, y = depth, col = magType))+
+  geom_point(alpha = 0.6)+
+  facet_wrap(~ month)+
+  theme_light()
+
+# Removing no variance data
+
+eqClean = DataEq[ , c(-10, -11, -14, -19, -20,-21)]
+
+```
+
+## Correlation of numeric Data
+
+We observe the correlation of numeric data.
+
+```{r, message=FALSE, warning=FALSE}
+
+numClean = eqClean[, c(-1, -6, -10, -11)]
+
+chart.Correlation(numClean)
+
+```
+
+
